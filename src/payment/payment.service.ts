@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import { DatabaseService } from '../database.service';
 
 @Injectable()
@@ -34,26 +35,32 @@ export class PaymentService {
     const order = orderResult.rows[0];
 
     if (order.amount !== amount) {
-      throw new BadRequestException('Payment amount does not match order amount');
+      throw new BadRequestException(
+        'Payment amount does not match order amount',
+      );
     }
+
+    const tossOrderId = `TOSS_${randomUUID()}`;
 
     const paymentResult = await this.databaseService.query(
       `
       INSERT INTO payments (
         order_id,
+        toss_order_id,
         amount,
         status
       )
-      VALUES ($1, $2, 'ready')
+      VALUES ($1, $2, $3, 'ready')
       RETURNING
         id,
         order_id,
+        toss_order_id,
         payment_key,
         amount,
         status,
         created_at
       `,
-      [orderId, amount],
+      [orderId, tossOrderId, amount],
     );
 
     return paymentResult.rows[0];
