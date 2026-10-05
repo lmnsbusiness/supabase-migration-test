@@ -65,4 +65,34 @@ export class PaymentService {
 
     return paymentResult.rows[0];
   }
+
+  async confirmPayment(data: { paymentKey: string; orderId: string; amount: number }) {
+    const { paymentKey, orderId, amount } = data;
+    const secretKey = process.env.TOSS_SECRET_KEY;
+    
+    if (!secretKey) {
+      return { error: 'TOSS_SECRET_KEY is missing' };
+    }
+    
+    const encodedKey = Buffer.from(`${secretKey}:`).toString('base64');
+    
+    try {
+      const response = await fetch('https://api.tosspayments.com/v1/payments/confirm', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${encodedKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ paymentKey, orderId, amount }),
+      });
+      
+      const tossResult = await response.json();
+      
+      // TODO: 실제 DB 연동에 맞춰 UPDATE 쿼리 추가 필요 (status = 'approved')
+      
+      return { tossResult };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
 }

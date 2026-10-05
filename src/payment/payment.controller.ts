@@ -17,4 +17,9 @@ export class PaymentController {
       Number(body.amount),
     );
   }
+
+  @Post('confirm')
+  async confirmPayment(@Body() body: { paymentKey: string; orderId: string; amount: number }) {
+    return this.paymentService.confirmPayment(body);
+  }
 }
