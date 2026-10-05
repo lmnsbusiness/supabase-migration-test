@@ -1,3 +1,4 @@
+import { DeliveryModule } from './delivery/delivery.module';
 import { DatabaseModule } from './database/database.module';
 import { DualDbController } from './database/dual-db.controller';
 import { Module } from '@nestjs/common';
@@ -8,6 +9,7 @@ import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
+    DeliveryModule,
     DatabaseModule,
     OrderModule,
     PaymentModule,
