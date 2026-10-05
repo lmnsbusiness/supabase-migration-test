@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Pool } from 'pg';
+import { Pool, QueryResultRow } from 'pg';
 
 @Injectable()
 export class DatabaseService {
@@ -19,8 +19,15 @@ export class DatabaseService {
     return this.pool;
   }
 
+  async query<T extends QueryResultRow = any>(
+    text: string,
+    params?: any[],
+  ) {
+    return this.getPool().query<T>(text, params);
+  }
+
   async health() {
-    const result = await this.getPool().query(`
+    const result = await this.query(`
       SELECT
         current_database() AS database,
         current_user AS db_user,
