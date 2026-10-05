@@ -1,3 +1,4 @@
+import { CompareController } from './database/compare.controller';
 import { DeliveryModule } from './delivery/delivery.module';
 import { DatabaseModule } from './database/database.module';
 import { DualDbController } from './database/dual-db.controller';
@@ -15,6 +16,7 @@ import { PaymentModule } from './payment/payment.module';
     PaymentModule,
   ],
   controllers: [
+    CompareController,
     DualDbController,AppController],
   providers: [DatabaseService],
 })
