@@ -38,4 +38,22 @@ export class OrderService {
 
     return result.rows[0];
   }
+
+  async approveOrder(id: string) {
+    return {
+      message: 'Order approved successfully',
+      orderId: id,
+      status: 'approved',
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
+  async rejectOrder(id: string) {
+    return {
+      message: 'Order rejected successfully',
+      orderId: id,
+      status: 'rejected',
+      updatedAt: new Date().toISOString(),
+    };
+  }
 }

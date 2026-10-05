@@ -19,4 +19,16 @@ export class OrderController {
   async findOne(@Param('id') id: string) {
     return this.orderService.findOne(Number(id));
   }
+
+  @Post(':id/approve')
+  async approveOrder(@Param('id') id: string) {
+    const service = (this as any).ordersService || (this as any).orderService;
+    return service.approveOrder(id);
+  }
+
+  @Post(':id/reject')
+  async rejectOrder(@Param('id') id: string) {
+    const service = (this as any).ordersService || (this as any).orderService;
+    return service.rejectOrder(id);
+  }
 }
